@@ -1,0 +1,1340 @@
+
+                      Design Compiler Graphical
+                            DC Ultra (TM)
+                             DFTMAX (TM)
+                         Power Compiler (TM)
+                           DesignWare (R)
+                           DC Expert (TM)
+                         Design Vision (TM)
+                          HDL Compiler (TM)
+                         VHDL Compiler (TM)
+                            DFT Compiler
+                        Library Compiler (TM)
+                         Design Compiler(R)
+
+         Version J-2014.09-SP5-2 for RHEL64 -- Jul 11, 2015
+               Copyright (c) 1988-2015 Synopsys, Inc.
+
+This software and the associated documentation are confidential and 
+proprietary to Synopsys, Inc. Your use or disclosure of this software 
+is subject to the terms and conditions of a written license agreement 
+between you, or your company, and Synopsys, Inc.
+
+Initializing...
+##############################################
+# Setup: fill out the following parameters: name of clock signal, clock period (ns),
+# reset signal name (if used), name of top-level module, name of source file
+set CLK_NAME "clk";
+clk
+set CLK_PERIOD 1.3;
+1.3
+set RST_NAME "reset";
+reset
+set TOP_MOD_NAME "net_4_8_12_16_16_1_20";
+net_4_8_12_16_16_1_20
+set SRC_FILE "net_4_8_12_16_16_1_20.sv";
+net_4_8_12_16_16_1_20.sv
+# If you have multiple source files, change the line above to list them all like this:
+# set SRC_FILE [list "file1.sv" "file2.sv"];
+###############################################
+source setupdc.tcl
+NangateOpenCellLibrary_typical.db dw_foundation.sldb
+file mkdir work_synth
+define_design_lib WORK -path work_synth
+1
+analyze $SRC_FILE -format sverilog
+Running PRESTO HDLC
+Searching for ./net_4_8_12_16_16_1_20.sv
+Compiling source file ./net_4_8_12_16_16_1_20.sv
+Opening include file memory.sv
+Opening include file controller.sv
+Opening include file datapath_gen_p3_relu.sv
+Presto compilation completed successfully.
+Loading db file '/home/home4/pmilder/ese507/synthesis/lib/NangateOpenCellLibrary_typical.db'
+Loading db file '/usr/local/synopsys/syn/libraries/syn/dw_foundation.sldb'
+1
+elaborate -work WORK $TOP_MOD_NAME
+Loading db file '/usr/local/synopsys/syn/libraries/syn/gtech.db'
+Loading db file '/usr/local/synopsys/syn/libraries/syn/standard.sldb'
+  Loading link library 'NangateOpenCellLibrary'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Presto compilation completed successfully.
+Elaborated 1 design.
+Current design is now 'net_4_8_12_16_16_1_20'.
+Information: Building the design 'l1_fc_8_4_16_1_2' instantiated from design 'net_4_8_12_16_16_1_20' with
+	the parameters "8,4,16,2,1". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'l2_fc_12_8_16_1_4' instantiated from design 'net_4_8_12_16_16_1_20' with
+	the parameters "12,8,16,4,2". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'l3_fc3_16_12_16_1_8' instantiated from design 'net_4_8_12_16_16_1_20' with
+	the parameters "16,12,16,8,3". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'control_gen' instantiated from design 'l1_fc_8_4_16_1_2_M8_N4_T16_P2_L1' with
+	the parameters "8,4,16,2". (HDL-193)
+Warning:  controller.sv:286: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:308: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:329: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:325: signed to unsigned conversion occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine control_gen_M8_N4_T16_P2 line 42 in file
+		'controller.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine control_gen_M8_N4_T16_P2 line 110 in file
+		'controller.sv'.
+==================================================================================
+|     Register Name      |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+==================================================================================
+|     input_cnt_reg      | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|    process_cnt_reg     | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+|       y_cnt_reg        | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+|   process_stall_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+| process_initialize_reg | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   iteration_cnt_reg    | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|   iteration_out_reg    | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+==================================================================================
+Presto compilation completed successfully.
+Information: Building the design 'datapath_gen_p3_relu' instantiated from design 'l1_fc_8_4_16_1_2_M8_N4_T16_P2_L1' with
+	the parameters "8,4,16,2,1". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'control_gen' instantiated from design 'l2_fc_12_8_16_1_4_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4". (HDL-193)
+Warning:  controller.sv:286: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:308: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:329: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:325: signed to unsigned conversion occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine control_gen_M12_N8_T16_P4 line 42 in file
+		'controller.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine control_gen_M12_N8_T16_P4 line 110 in file
+		'controller.sv'.
+==================================================================================
+|     Register Name      |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+==================================================================================
+|     input_cnt_reg      | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|    process_cnt_reg     | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|       y_cnt_reg        | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|   process_stall_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+| process_initialize_reg | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   iteration_cnt_reg    | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|   iteration_out_reg    | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+==================================================================================
+Presto compilation completed successfully.
+Information: Building the design 'datapath_gen_p3_relu' instantiated from design 'l2_fc_12_8_16_1_4_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4,2". (HDL-193)
+Statistics for MUX_OPs
+===================================================================================
+|             block name/line              | Inputs | Outputs | # sel inputs | MB |
+===================================================================================
+| datapath_gen_p3_relu_M12_N8_T16_P4_L2/25 |   4    |   16    |      2       | N  |
+===================================================================================
+Presto compilation completed successfully.
+Information: Building the design 'control_gen' instantiated from design 'l3_fc3_16_12_16_1_8_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8". (HDL-193)
+Warning:  controller.sv:286: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:308: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:329: signed to unsigned conversion occurs. (VER-318)
+Warning:  controller.sv:325: signed to unsigned conversion occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine control_gen_M16_N12_T16_P8 line 42 in file
+		'controller.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine control_gen_M16_N12_T16_P8 line 110 in file
+		'controller.sv'.
+==================================================================================
+|     Register Name      |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+==================================================================================
+|     input_cnt_reg      | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|    process_cnt_reg     | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|       y_cnt_reg        | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|   process_stall_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+| process_initialize_reg | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   iteration_cnt_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   iteration_out_reg    | Flip-flop |   9   |  Y  | N  | N  | N  | N  | N  | N  |
+==================================================================================
+Presto compilation completed successfully.
+Information: Building the design 'datapath_gen_p3_relu' instantiated from design 'l3_fc3_16_12_16_1_8_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,3". (HDL-193)
+Statistics for MUX_OPs
+====================================================================================
+|             block name/line               | Inputs | Outputs | # sel inputs | MB |
+====================================================================================
+| datapath_gen_p3_relu_M16_N12_T16_P8_L3/25 |   8    |   16    |      3       | N  |
+====================================================================================
+Presto compilation completed successfully.
+Information: Building the design 'memory' instantiated from design 'datapath_gen_p3_relu_M8_N4_T16_P2_L1' with
+	the parameters "16,4". (HDL-193)
+
+Inferred memory devices in process
+	in routine memory_WIDTH16_SIZE4 line 17 in file
+		'memory.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    data_out_reg     | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Statistics for MUX_OPs
+==================================================================
+|    block name/line      | Inputs | Outputs | # sel inputs | MB |
+==================================================================
+| memory_WIDTH16_SIZE4/18 |   4    |   16    |      2       | N  |
+==================================================================
+Presto compilation completed successfully.
+Information: Building the design 'genSatMac_p3_relu' instantiated from design 'datapath_gen_p3_relu_M8_N4_T16_P2_L1' with
+	the parameters "8,4,16,2,1". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'memory' instantiated from design 'datapath_gen_p3_relu_M12_N8_T16_P4_L2' with
+	the parameters "16,8". (HDL-193)
+
+Inferred memory devices in process
+	in routine memory_WIDTH16_SIZE8 line 17 in file
+		'memory.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    data_out_reg     | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Statistics for MUX_OPs
+==================================================================
+|    block name/line      | Inputs | Outputs | # sel inputs | MB |
+==================================================================
+| memory_WIDTH16_SIZE8/18 |   8    |   16    |      3       | N  |
+==================================================================
+Presto compilation completed successfully.
+Information: Building the design 'genSatMac_p3_relu' instantiated from design 'datapath_gen_p3_relu_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4,2". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'memory' instantiated from design 'datapath_gen_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12". (HDL-193)
+
+Inferred memory devices in process
+	in routine memory_WIDTH16_SIZE12 line 17 in file
+		'memory.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    data_out_reg     | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|       mem_reg       | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'genSatMac_p3_relu' instantiated from design 'datapath_gen_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,3". (HDL-193)
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M8_N4_T16_P2_L1' with
+	the parameters "8,4,16,2,0,1". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M8_N4_T16_P2_I0_L1 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M8_N4_T16_P2_L1' with
+	the parameters "8,4,16,2,1,1". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M8_N4_T16_P2_I1_L1 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4,0,2". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M12_N8_T16_P4_I0_L2 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4,1,2". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M12_N8_T16_P4_I1_L2 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4,2,2". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M12_N8_T16_P4_I2_L2 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M12_N8_T16_P4_L2' with
+	the parameters "12,8,16,4,3,2". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M12_N8_T16_P4_I3_L2 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,0,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I0_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,1,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I1_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,2,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I2_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,3,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I3_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,4,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I4_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,5,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I5_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,6,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I6_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'sat_mac_p3_relu' instantiated from design 'genSatMac_p3_relu_M16_N12_T16_P8_L3' with
+	the parameters "16,12,16,8,7,3". (HDL-193)
+
+Inferred memory devices in process
+	in routine sat_mac_p3_relu_M16_N12_T16_P8_I7_L3 line 105 in file
+		'datapath_gen_p3_relu.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    valid_out_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     f_temp_reg      | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|        m_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p1' instantiated from design 'sat_mac_p3_relu_M8_N4_T16_P2_I0_L1' with
+	the parameters "8,4,16,2,0". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:79: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:80: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:81: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:82: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:84: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:86: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:87: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:89: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:90: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:91: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:92: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:93: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p1_M8_N4_T16_P2_I0 line 116 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p1' instantiated from design 'sat_mac_p3_relu_M8_N4_T16_P2_I1_L1' with
+	the parameters "8,4,16,2,1". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:98: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:99: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:100: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:101: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:103: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:109: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:111: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p1_M8_N4_T16_P2_I1 line 116 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p2' instantiated from design 'sat_mac_p3_relu_M12_N8_T16_P4_I0_L2' with
+	the parameters "12,8,16,4,0". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:164: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:166: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:168: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:169: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:170: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:171: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:172: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:175: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:176: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:178: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:179: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:180: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:181: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:183: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:185: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p2_M12_N8_T16_P4_I0 line 269 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p2' instantiated from design 'sat_mac_p3_relu_M12_N8_T16_P4_I1_L2' with
+	the parameters "12,8,16,4,1". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:190: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:192: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:193: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:204: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:207: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:208: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:210: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:212: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p2_M12_N8_T16_P4_I1 line 269 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p2' instantiated from design 'sat_mac_p3_relu_M12_N8_T16_P4_I2_L2' with
+	the parameters "12,8,16,4,2". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:218: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:219: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:222: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:223: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:225: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:226: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:228: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:229: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:231: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:232: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:233: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:234: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:235: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:236: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:237: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:238: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:239: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p2_M12_N8_T16_P4_I2 line 269 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p2' instantiated from design 'sat_mac_p3_relu_M12_N8_T16_P4_I3_L2' with
+	the parameters "12,8,16,4,3". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:243: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:244: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:245: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:247: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:250: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:252: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:254: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:255: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:257: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:258: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:259: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:260: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:261: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:263: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p2_M12_N8_T16_P4_I3 line 269 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I0_L3' with
+	the parameters "16,12,16,8,0". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:317: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:320: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:325: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:326: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:327: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:328: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:330: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:331: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:332: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:333: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:335: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:337: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:339: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I0 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I1_L3' with
+	the parameters "16,12,16,8,1". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:344: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:348: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:351: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:353: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:354: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:355: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:356: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:357: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:358: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:361: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:365: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I1 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I2_L3' with
+	the parameters "16,12,16,8,2". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:369: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:370: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:375: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:377: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:378: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:379: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:385: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:388: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:390: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:392: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I2 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I3_L3' with
+	the parameters "16,12,16,8,3". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:396: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:397: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:399: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:400: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:401: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:402: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:404: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:406: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:407: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:409: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:410: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:411: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:412: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:413: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:416: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I3 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I4_L3' with
+	the parameters "16,12,16,8,4". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:421: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:422: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:423: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:425: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:426: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:428: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:431: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:432: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:433: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:435: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:440: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:441: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:442: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:443: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I4 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I5_L3' with
+	the parameters "16,12,16,8,5". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:447: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:448: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:449: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:450: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:452: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:455: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:456: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:457: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:459: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:460: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:461: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:462: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:463: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:465: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:467: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:468: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I5 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I6_L3' with
+	the parameters "16,12,16,8,6". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:474: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:476: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:477: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:478: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:483: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:484: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:487: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:488: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:489: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:492: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:494: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:495: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:496: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I6 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'rom_gem_p3' instantiated from design 'sat_mac_p3_relu_M16_N12_T16_P8_I7_L3' with
+	the parameters "16,12,16,8,7". (HDL-193)
+Warning:  ./net_4_8_12_16_16_1_20.sv:500: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:502: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:507: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:509: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:512: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:514: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:515: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:516: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:517: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:519: unsigned to signed assignment occurs. (VER-318)
+Warning:  ./net_4_8_12_16_16_1_20.sv:520: unsigned to signed assignment occurs. (VER-318)
+
+Inferred memory devices in process
+	in routine rom_gem_p3_M16_N12_T16_P8_I7 line 526 in file
+		'./net_4_8_12_16_16_1_20.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        z_reg        | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+1
+###### CLOCKS AND PORTS #######
+set CLK_PORT [get_ports $CLK_NAME]
+{clk}
+set TMP1 [remove_from_collection [all_inputs] $CLK_PORT]
+{reset input_valid input_data[15] input_data[14] input_data[13] input_data[12] input_data[11] input_data[10] input_data[9] input_data[8] input_data[7] input_data[6] input_data[5] input_data[4] input_data[3] input_data[2] input_data[1] input_data[0] output_ready}
+set INPUTS [remove_from_collection $TMP1 $RST_NAME]
+{input_valid input_data[15] input_data[14] input_data[13] input_data[12] input_data[11] input_data[10] input_data[9] input_data[8] input_data[7] input_data[6] input_data[5] input_data[4] input_data[3] input_data[2] input_data[1] input_data[0] output_ready}
+create_clock -period $CLK_PERIOD [get_ports clk]
+1
+# set delay for inputs to be 0.2ns
+set_input_delay 0.2 -max -clock clk $INPUTS
+1
+set_output_delay 0.2 -max -clock clk [all_outputs]
+1
+###### OPTIMIZATION #######
+set_max_area 0 
+1
+###### RUN #####
+compile_ultra
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | J-2014.09-DWBB_201409.5.2 |   *     |
+| Licensed DW Building Blocks        | J-2014.09-DWBB_201409.5.2 |   *     |
+============================================================================
+
+Information: Sequential output inversion is enabled.  SVF file must be used for formal verification. (OPT-1208)
+
+Information: There are 34 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+Loaded alib file './alib-52/NangateOpenCellLibrary_typical.db.alib'
+  Building model 'DW01_NAND2'
+Information: Ungrouping hierarchy layer_1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/control1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/control1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/control1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1/vectorMem before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1/satmac before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/vectorMem before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/vectorMem before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1/satmac/my_sat_mac[0].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1/satmac/my_sat_mac[1].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[0].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[1].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[2].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[3].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[0].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[1].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[2].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[3].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[4].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[5].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[6].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[7].s before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[0].s/genblk1.rom2 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[1].s/genblk1.rom2 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[2].s/genblk1.rom2 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_2/datapath1/satmac/my_sat_mac[3].s/genblk1.rom2 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[0].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[1].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[2].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[3].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[4].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[5].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[6].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy layer_3/datapath1/satmac/my_sat_mac[7].s/genblk1.rom3 before Pass 1 (OPT-776)
+Information: Ungrouping 43 of 44 hierarchies before Pass 1 (OPT-775)
+Information: State dependent leakage is now switched from on to off.
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'net_4_8_12_16_16_1_20'
+Information: Added key list 'DesignWare' to design 'net_4_8_12_16_16_1_20'. (DDB-72)
+ Implement Synthetic for 'net_4_8_12_16_16_1_20'.
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[1][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[3][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[5][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[7][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[0][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[2][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[4][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/mem_reg[6][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/datapath1/vectorMem/data_out_reg[15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[6][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[7][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[11][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[9][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[3][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[1][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[4][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[10][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[8][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[2][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[0][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/mem_reg[5][15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/datapath1/vectorMem/data_out_reg[15]' is a constant and will be removed. (OPT-1206)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[14]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[13]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[12]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[11]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[10]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[9]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[8]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[7]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[6]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[5]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[4]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[3]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[1].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[14]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[13]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[12]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[11]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[10]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[9]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[8]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[7]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[6]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[5]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[4]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+Information: In design 'net_4_8_12_16_16_1_20', the register 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[3]' is removed because it is merged to 'layer_1/datapath1/satmac/my_sat_mac[0].s/genblk1.rom1/z_reg[15]'. (OPT-1215)
+
+  Beginning Mapping Optimizations  (Ultra High effort)
+  -------------------------------
+  Mapping Optimization (Phase 1)
+Information: The register 'layer_3/control1/input_cnt_reg[4]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_3/control1/input_cnt_reg[5]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/control1/input_cnt_reg[4]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_2/control1/input_cnt_reg[5]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_1/control1/input_cnt_reg[3]' is a constant and will be removed. (OPT-1206)
+Information: The register 'layer_1/control1/input_cnt_reg[4]' is a constant and will be removed. (OPT-1206)
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    0:00:55   41156.6      0.66     237.7     688.0                           1019135.5625
+    0:00:55   41156.6      0.66     237.7     688.0                           1019135.5625
+    0:00:55   41156.6      0.66     237.7     688.0                           1019135.5625
+    0:00:55   41156.1      0.66     237.7     688.0                           1019092.3125
+  Re-synthesis Optimization (Phase 1)
+  Re-synthesis Optimization (Phase 2)
+  Global Optimization (Phase 1)
+  Global Optimization (Phase 2)
+  Global Optimization (Phase 3)
+  Global Optimization (Phase 4)
+  Global Optimization (Phase 5)
+  Global Optimization (Phase 6)
+  Global Optimization (Phase 7)
+  Global Optimization (Phase 8)
+  Global Optimization (Phase 9)
+  Global Optimization (Phase 10)
+  Global Optimization (Phase 11)
+  Global Optimization (Phase 12)
+  Global Optimization (Phase 13)
+  Global Optimization (Phase 14)
+  Global Optimization (Phase 15)
+  Global Optimization (Phase 16)
+  Global Optimization (Phase 17)
+  Global Optimization (Phase 18)
+  Global Optimization (Phase 19)
+  Global Optimization (Phase 20)
+  Global Optimization (Phase 21)
+  Global Optimization (Phase 22)
+  Global Optimization (Phase 23)
+  Global Optimization (Phase 24)
+  Global Optimization (Phase 25)
+  Global Optimization (Phase 26)
+  Global Optimization (Phase 27)
+  Global Optimization (Phase 28)
+  Global Optimization (Phase 29)
+  Global Optimization (Phase 30)
+  Global Optimization (Phase 31)
+  Selecting critical implementations
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_14'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_15'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_16'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_17'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_18'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_19'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_20'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_21'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_22'
+  Mapping 'net_4_8_12_16_16_1_20_DW01_add_23'
+  Mapping 'net_4_8_12_16_16_1_20_DW_mult_uns_14'
+    0:01:08   32186.3      0.45     160.4     142.8                           690837.3750
+
+
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    0:01:08   32186.3      0.45     160.4     142.8                           690837.3750
+    0:01:08   32186.3      0.45     160.4     142.8                           690837.3750
+    0:01:09   32046.6      0.45     158.9     142.8                           685829.5000
+    0:01:09   32046.6      0.45     158.9     142.8                           685829.5000
+    0:01:10   32101.9      0.44     154.7     138.1                           687938.3750
+    0:01:10   32101.9      0.44     154.7     138.1                           687938.3750
+    0:01:10   32101.9      0.44     154.7     138.1                           687938.3750
+    0:01:10   32101.9      0.44     154.7     138.1                           687938.3750
+    0:01:11   32101.9      0.44     154.7     138.1                           687938.3750
+    0:01:11   32101.9      0.44     154.7     138.1                           687938.3750
+    0:01:15   32673.8      0.31     116.3     115.4                           708388.3750
+    0:01:15   32673.8      0.31     116.3     115.4                           708388.3750
+    0:01:18   32913.8      0.29      91.9     117.7                           716090.9375
+
+  Beginning Delay Optimization
+  ----------------------------
+    0:01:18   32913.8      0.28      91.8     117.7                           716090.9375
+    0:01:20   33140.9      0.24      81.0     109.9                           724082.7500
+    0:01:20   33140.9      0.24      81.0     109.9                           724082.7500
+    0:01:23   33306.1      0.23      77.9     109.9                           729372.0000
+    0:01:23   33294.7      0.23      77.7     109.9                           729007.0000
+    0:01:23   33294.7      0.23      77.7     109.9                           729007.0000
+    0:01:23   33294.7      0.23      77.7     109.9                           729007.0000
+    0:01:24   33294.7      0.23      77.7     109.9                           729007.0000
+
+
+  Beginning Design Rule Fixing  (max_capacitance)
+  ----------------------------
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    0:01:24   33294.7      0.23      77.7     109.9                           729007.0000
+  Global Optimization (Phase 32)
+  Global Optimization (Phase 33)
+  Global Optimization (Phase 34)
+    0:01:26   32762.4      0.19      68.6      39.3 layer_2/datapath1/satmac/my_sat_mac[3].s/m_reg[15]/D 716425.6875
+    0:01:26   32748.1      0.18      65.3      39.3                           715955.0000
+    0:01:27   32869.6      0.18      61.0      39.3                           719981.1250
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    0:01:28   32869.6      0.18      61.0      39.3                           719981.1250
+    0:01:28   32847.5      0.18      61.0      39.3                           719023.8125
+
+
+  Beginning Leakage Power Optimization  (max_leakage_power 0)
+  ------------------------------------
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    0:01:42   32751.5      0.18      60.7      39.3                           716693.8750
+  Global Optimization (Phase 35)
+  Global Optimization (Phase 36)
+  Global Optimization (Phase 37)
+  Global Optimization (Phase 38)
+  Global Optimization (Phase 39)
+  Global Optimization (Phase 40)
+  Global Optimization (Phase 41)
+  Global Optimization (Phase 42)
+  Global Optimization (Phase 43)
+  Global Optimization (Phase 44)
+  Global Optimization (Phase 45)
+  Global Optimization (Phase 46)
+  Global Optimization (Phase 47)
+  Global Optimization (Phase 48)
+  Global Optimization (Phase 49)
+  Global Optimization (Phase 50)
+  Global Optimization (Phase 51)
+  Global Optimization (Phase 52)
+  Global Optimization (Phase 53)
+  Global Optimization (Phase 54)
+  Global Optimization (Phase 55)
+  Global Optimization (Phase 56)
+  Global Optimization (Phase 57)
+  Global Optimization (Phase 58)
+  Global Optimization (Phase 59)
+  Global Optimization (Phase 60)
+  Global Optimization (Phase 61)
+  Global Optimization (Phase 62)
+  Global Optimization (Phase 63)
+  Global Optimization (Phase 64)
+  Global Optimization (Phase 65)
+  Global Optimization (Phase 66)
+  Global Optimization (Phase 67)
+  Global Optimization (Phase 68)
+  Global Optimization (Phase 69)
+  Global Optimization (Phase 70)
+  Global Optimization (Phase 71)
+  Global Optimization (Phase 72)
+  Global Optimization (Phase 73)
+    0:02:09   32325.6      0.00       0.0       0.0                           698070.4375
+    0:02:09   32325.6      0.00       0.0       0.0                           698070.4375
+    0:02:09   32325.6      0.00       0.0       0.0                           698070.4375
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:10   32286.8      0.00       0.0       0.0                           695037.2500
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    0:02:11   32286.8      0.00       0.0       0.0                           695037.2500
+    0:02:12   32022.7      0.02       2.4       0.0                           683518.9375
+    0:02:13   32061.2      0.01       1.6       0.0                           685231.1250
+    0:02:13   32061.2      0.01       1.6       0.0                           685231.1250
+    0:02:14   32063.6      0.01       1.5       0.0                           685510.3750
+    0:02:16   31950.9      0.01       1.3       0.0                           681931.5000
+    0:02:18   32156.7      0.00       0.0       0.0                           689970.1250
+    0:02:19   32022.4      0.00       0.0       0.0                           683995.0625
+Loading db file '/home/home4/pmilder/ese507/synthesis/lib/NangateOpenCellLibrary_typical.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'net_4_8_12_16_16_1_20' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'clk': 1126 load(s), 1 driver(s)
+Information: State dependent leakage is now switched from off to on.
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+1
+report_area
+ 
+****************************************
+Report : area
+Design : net_4_8_12_16_16_1_20
+Version: J-2014.09-SP5-2
+Date   : Sun Dec  6 15:16:15 2020
+****************************************
+
+Information: Updating design information... (UID-85)
+Warning: Design 'net_4_8_12_16_16_1_20' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/home4/pmilder/ese507/synthesis/lib/NangateOpenCellLibrary_typical.db)
+
+Number of ports:                           38
+Number of nets:                         22319
+Number of cells:                        19364
+Number of combinational cells:          18238
+Number of sequential cells:              1126
+Number of macros/black boxes:               0
+Number of buf/inv:                       1649
+Number of references:                      51
+
+Combinational area:              26903.240042
+Buf/Inv area:                     1043.518002
+Noncombinational area:            5119.169818
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                 32022.409860
+Total area:                 undefined
+1
+report_power
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : net_4_8_12_16_16_1_20
+Version: J-2014.09-SP5-2
+Date   : Sun Dec  6 15:16:15 2020
+****************************************
+
+
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/home4/pmilder/ese507/synthesis/lib/NangateOpenCellLibrary_typical.db)
+
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+net_4_8_12_16_16_1_20  5K_hvratio_1_1    NangateOpenCellLibrary
+
+
+Global Operating Voltage = 1.1  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000ff
+    Time Units = 1ns
+    Dynamic Power Units = 1uW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+  Cell Internal Power  =   5.8252 mW   (92%)
+  Net Switching Power  = 537.3035 uW    (8%)
+                         ---------
+Total Dynamic Power    =   6.3625 mW  (100%)
+
+Cell Leakage Power     = 682.0074 uW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register       5.3898e+03           69.1649        8.9281e+04        5.5482e+03  (  78.76%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational    435.3912          468.1377        5.9273e+05        1.4963e+03  (  21.24%)
+--------------------------------------------------------------------------------------------------
+Total          5.8252e+03 uW       537.3026 uW     6.8201e+05 nW     7.0445e+03 uW
+1
+report_timing
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : net_4_8_12_16_16_1_20
+Version: J-2014.09-SP5-2
+Date   : Sun Dec  6 15:16:15 2020
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: layer_3/datapath1/satmac/my_sat_mac[3].s/f_temp_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: layer_3/datapath1/satmac/my_sat_mac[3].s/f_temp_reg[9]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  net_4_8_12_16_16_1_20
+                     5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  layer_3/datapath1/satmac/my_sat_mac[3].s/f_temp_reg[0]/CK (DFF_X1)
+                                                          0.00 #     0.00 r
+  layer_3/datapath1/satmac/my_sat_mac[3].s/f_temp_reg[0]/Q (DFF_X1)
+                                                          0.09       0.09 f
+  U3144/ZN (AND2_X2)                                      0.05       0.14 f
+  U3143/ZN (NAND2_X1)                                     0.03       0.16 r
+  U13352/ZN (AND2_X1)                                     0.05       0.21 r
+  U13354/ZN (OAI21_X1)                                    0.03       0.24 f
+  U4890/ZN (AOI21_X1)                                     0.04       0.28 r
+  U13356/ZN (OAI21_X1)                                    0.03       0.32 f
+  U4891/ZN (AOI21_X1)                                     0.04       0.36 r
+  U13358/ZN (OAI21_X1)                                    0.03       0.39 f
+  U13359/ZN (AOI21_X1)                                    0.04       0.43 r
+  U13360/ZN (OAI21_X1)                                    0.03       0.47 f
+  U20923/CO (FA_X1)                                       0.10       0.57 f
+  U3947/ZN (NAND2_X1)                                     0.03       0.60 r
+  U3949/ZN (NAND3_X1)                                     0.05       0.65 f
+  U5895/ZN (NAND2_X1)                                     0.04       0.68 r
+  U5897/ZN (NAND3_X1)                                     0.05       0.73 f
+  U6070/ZN (NAND2_X1)                                     0.05       0.77 r
+  U6011/ZN (NAND3_X1)                                     0.04       0.81 f
+  U6163/ZN (NAND2_X1)                                     0.03       0.84 r
+  U6165/ZN (NAND3_X1)                                     0.04       0.88 f
+  U20933/CO (FA_X1)                                       0.09       0.97 f
+  U5973/ZN (XNOR2_X1)                                     0.06       1.03 r
+  U13364/ZN (OAI21_X1)                                    0.04       1.07 f
+  U13365/ZN (OR2_X2)                                      0.07       1.14 f
+  U4333/ZN (INV_X1)                                       0.05       1.19 r
+  U20924/ZN (AOI22_X1)                                    0.03       1.22 f
+  U20925/ZN (NAND2_X1)                                    0.03       1.26 r
+  layer_3/datapath1/satmac/my_sat_mac[3].s/f_temp_reg[9]/D (DFF_X1)
+                                                          0.01       1.27 r
+  data arrival time                                                  1.27
+
+  clock clk (rise edge)                                   1.30       1.30
+  clock network delay (ideal)                             0.00       1.30
+  layer_3/datapath1/satmac/my_sat_mac[3].s/f_temp_reg[9]/CK (DFF_X1)
+                                                          0.00       1.30 r
+  library setup time                                     -0.03       1.27
+  data required time                                                 1.27
+  --------------------------------------------------------------------------
+  data required time                                                 1.27
+  data arrival time                                                 -1.27
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1
+write -f verilog $TOP_MOD_NAME -output gates.v -hierarchy
+Writing verilog file '/home/home2/mbello/ese507work/proj3/testing/proj3/gates.v'.
+Warning: Verilog 'assign' or 'tran' statements are written out. (VO-4)
+1
+quit
+
+Thank you...
