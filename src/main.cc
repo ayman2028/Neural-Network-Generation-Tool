@@ -25,8 +25,11 @@
 #include <assert.h>
 #include <math.h>
 #include <ctime>   // For time() function used in random number generation
-#include <direct.h>    // For _mkdir on Windows
-#include <sys/stat.h> // For mkdir on Unix/Linux
+#ifdef _WIN32
+   #include <direct.h>    // For _mkdir on Windows
+   #else
+   #include <sys/stat.h>  // For mkdir on Unix/Linux
+   #endif
 #include <limits>     // For numeric_limits used in interactive mode
 using namespace std;
 
