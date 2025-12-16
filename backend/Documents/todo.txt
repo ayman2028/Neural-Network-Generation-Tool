@@ -1,0 +1,26 @@
+# Backend TODO List
+
+## User Authentication
+- [x] Create CustomUser model
+- [x] Create CustomUserCreationForm
+- [x] Create CustomUserChangeForm
+- [x] Set up CustomUserAdmin
+- [x] Make email required and unique
+- [x] Create migrations
+- [x] Apply migrations to database
+- [x] Create superuser
+
+## Next Steps
+- [ ] Create user registration endpoint
+- [ ] Create user login endpoint
+- [ ] Create user profile endpoint
+- [ ] Add password reset functionality
+- [ ] Add email verification
+- [ ] Create API authentication (tokens/JWT)
+- [ ] Add user permissions and groups
+
+## Additional Features
+- [ ] User profile picture upload
+- [ ] User bio/description field
+- [ ] Social media links
+- [ ] Two-factor authentication
