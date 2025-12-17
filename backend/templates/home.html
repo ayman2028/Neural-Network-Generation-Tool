@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Welcome, {{ user.username }}!</h1>
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <h1>Welcome to the Neural Network Generation Tool</h1>
+        <p>Please <a href="{% url 'login' %}">log in</a> to access your dashboard.</p>
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    {% endif %}
+{% endblock %} 

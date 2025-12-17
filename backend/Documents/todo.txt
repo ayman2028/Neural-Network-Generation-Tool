@@ -9,10 +9,15 @@
 - [x] Create migrations
 - [x] Apply migrations to database
 - [x] Create superuser
+- [x] Create user registration endpoint (SignUpView)
+- [x] Create user login endpoint (LoginView)
+- [x] Create user logout endpoint (LogoutView)
+- [x] Set up authentication URLs
+- [x] Configure login/logout redirects in settings
+- [x] Create authentication templates (signup, login, base)
+- [x] Create home page template
 
 ## Next Steps
-- [ ] Create user registration endpoint
-- [ ] Create user login endpoint
 - [ ] Create user profile endpoint
 - [ ] Add password reset functionality
 - [ ] Add email verification

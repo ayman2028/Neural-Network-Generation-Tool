@@ -122,18 +122,160 @@ To apply the migrations to the database:
 python manage.py migrate accounts
 ```
 
+### 6. Views (`accounts/views.py`)
+
+We created views for user authentication:
+
+```python
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
+from django.contrib.auth.views import LoginView, LogoutView
+from .forms import CustomUserCreationForm
+
+# Sign Up View - Creates a new user
+class SignUpView(generic.CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')  # Redirect to login page after successful signup
+    template_name = 'registration/signup.html'
+
+# Login View - User logs into their account
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    success_url = reverse_lazy('home')
+
+# Logout View - User logs out (built-in Django view)
+# Redirects to home page after logout (configured in settings)
+```
+
+**What this does:**
+- `SignUpView` - Handles user registration, uses `CustomUserCreationForm`, requires email
+- `LoginView` - Handles user login, redirects to home page on success
+- `LogoutView` - Django's built-in logout handler, requires POST request for security
+- After logout, users are redirected to the home page
+
+### 7. URL Configuration (`accounts/urls.py` and `config/urls.py`)
+
+We created URL patterns for authentication:
+
+```python
+# accounts/urls.py
+from django.urls import path
+from .views import SignUpView, CustomLoginView
+from django.contrib.auth.views import LogoutView
+
+urlpatterns = [
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(http_method_names=['get', 'post']), name='logout'),
+]
+```
+
+```python
+# config/urls.py
+from django.contrib import admin
+from django.urls import path, include
+from django.views.generic import TemplateView
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+]
+```
+
+**What this does:**
+- Maps SignUp, Login, and Logout views to URLs
+- `logout/` accepts both GET and POST for flexibility (normally only POST is required)
+- Home page is set as the root URL
+
+### 8. Settings Configuration (`config/settings.py`)
+
+We configured the authentication settings:
+
+```python
+# Custom User Model
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Login/Logout Redirects
+LOGIN_REDIRECT_URL = 'home'      # After successful login, redirect to home
+LOGOUT_REDIRECT_URL = 'home'     # After logout, redirect to home
+LOGIN_URL = 'login'              # Where to send unauthorized users
+
+# Templates
+TEMPLATES = [{
+    'DIRS': [str(BASE_DIR.joinpath('templates'))],
+    # ...
+}]
+```
+
+**What this does:**
+- Specifies the custom user model
+- Sets redirect URLs for login/logout
+- Tells Django where to find templates
+- `LOGIN_URL` redirects unauthenticated users to the login page
+
+### 9. Templates
+
+We created three main templates:
+
+```html
+<!-- templates/base.html -->
+<!-- Base template for all pages -->
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+
+<!-- templates/registration/signup.html -->
+<!-- User registration form -->
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+</form>
+
+<!-- templates/registration/login.html -->
+<!-- User login form -->
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
+
+<!-- templates/home.html -->
+<!-- Home page shown to all users -->
+{% extends 'base.html' %}
+```
+
+**What this does:**
+- `base.html` - Shows login/signup links if not authenticated, logout button if authenticated
+- `signup.html` - User registration form
+- `login.html` - User login form
+- `home.html` - Home page that extends base template
+- Logout form uses POST method for security (CSRF protection)
+
 ## Summary of the Flow
 
-1. **User Registration** → Uses `CustomUserCreationForm` → Requires email
-2. **User Profile Updates** → Uses `CustomUserChangeForm` 
-3. **Admin Panel** → Uses `CustomUserAdmin` class
-4. **Database** → Stores all users in the `CustomUser` model
+1. **User Registration** → `/accounts/signup/` → Uses `SignUpView` and `CustomUserCreationForm` → Requires email → Redirects to login
+2. **User Login** → `/accounts/login/` → Uses `LoginView` → Redirects to home on success
+3. **User Logout** → `/accounts/logout/` → Uses `LogoutView` (POST request) → Redirects to home
+4. **Admin Panel** → `/admin/` → Uses `CustomUserAdmin` class
+5. **Database** → All users stored in `CustomUser` model
+6. **Authentication** → Protected by Django's auth middleware, uses custom user model
 
 ## Benefits of This Setup
 
 ✓ Email is required for all users
 ✓ Email must be unique (no duplicate emails)
+✓ Full authentication workflow (signup, login, logout)
+✓ Secure logout with CSRF protection
 ✓ Easy to add more custom fields in the future
 ✓ Full control over user creation and management
 ✓ Works seamlessly with Django's authentication system
 ✓ Admin interface automatically supports our custom user model
+✓ Protected pages redirect unauthorized users to login
