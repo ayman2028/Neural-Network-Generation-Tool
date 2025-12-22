@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')), #We include this for signup and login functionality
     path('accounts/', include('django.contrib.auth.urls')),
+    path('networks/', include('networks.urls')),  # Neural network generation app
     #For now we will use a shortcut to a simple home page using a TemplateView
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

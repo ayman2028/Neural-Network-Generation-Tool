@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ network.name }}</h1>
+
+<div>
+    <h2>Details</h2>
+    <p><strong>Description:</strong> {{ network.description }}</p>
+    <p><strong>Mode:</strong> {{ network.get_mode_display }}</p>
+    <p><strong>Input Size:</strong> {{ network.input_size }}</p>
+    <p><strong>Bit Width (T):</strong> {{ network.T }}</p>
+    <p><strong>ReLU Activation:</strong> {% if network.R %}Yes{% else %}No{% endif %}</p>
+    <p><strong>Created:</strong> {{ network.created_at }}</p>
+    <p><strong>Updated:</strong> {{ network.updated_at }}</p>
+    {% if network.generated_files_path %}
+        <p><strong>Generated Files Path:</strong> {{ network.generated_files_path }}</p>
+    {% endif %}
+</div>
+
+<div>
+    <a href="{% url 'networks:list' %}">Back to Networks</a>
+</div>
+{% endblock %}

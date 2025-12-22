@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Create Network</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Network</button>
+    <a href="{% url 'networks:list' %}">Cancel</a>
+</form>
+{% endblock %}

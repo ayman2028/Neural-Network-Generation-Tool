@@ -1,0 +1,33 @@
+Networks App URLs
+==================
+
+Base path: /networks/
+
+Endpoints:
+----------
+
+1. Absolute: /networks/
+   GET /networks/
+   Name: 'networks:list'
+   View: network_list
+   Description: List all networks
+
+2. Absolute: /networks/create/
+   GET/POST /networks/create/
+   Name: 'networks:create'
+   View: network_create
+   Description: Create and generate network (POST) / View creation form (GET)
+
+3. Absolute: /networks/<int:pk>/download/
+   GET /networks/<int:pk>/download/
+   Name: 'networks:download'
+   View: network_download
+   Description: Download generated files as ZIP
+   Example: /networks/1/download/
+
+4. Absolute: /networks/<int:pk>/delete/
+   GET/POST /networks/<int:pk>/delete/
+   Name: 'networks:delete'
+   View: network_delete
+   Description: Delete network
+   Example: /networks/1/delete/
