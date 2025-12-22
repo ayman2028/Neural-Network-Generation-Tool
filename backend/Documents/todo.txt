@@ -1,6 +1,6 @@
 # Backend TODO List
 
-## User Authentication
+## User Authentication (COMPLETED)
 - [x] Create CustomUser model
 - [x] Create CustomUserCreationForm
 - [x] Create CustomUserChangeForm
@@ -17,15 +17,60 @@
 - [x] Create authentication templates (signup, login, base)
 - [x] Create home page template
 
-## Next Steps
-- [ ] Create user profile endpoint
+## Networks App - Views & URLs (PARTIAL)
+- [x] Create NetworkListView
+- [x] Create NetworkDetailView
+- [x] Create NetworkCreateView
+- [x] Create templates (list, detail, form)
+- [x] Set up URL patterns (3/5 active)
+- [x] Documentation created
+- [ ] Implement NetworkDownloadView
+- [ ] Implement NetworkDeleteView
+- [ ] Create delete confirmation template
+
+## Generator Module (COMPLETED)
+- [x] Create generator package structure
+- [x] Copy C++ executable to backend
+- [x] Implement generate_network() function
+- [x] Support Mode 1, 2, 3
+- [x] Create ZIP file output
+- [x] Write unit tests
+- [x] Write integration tests
+- [x] Document module
+
+## Next Steps (PRIORITY ORDER)
+
+### High Priority
+- [ ] Add "Generate Files" button to DetailView
+- [ ] Integrate generator.generate_network() into CreateView or post-creation hook
+- [ ] Handle user weight input (currently using dummy values)
+- [ ] Test end-to-end flow: Create → Generate → Download
+- [ ] Add error handling and user feedback
+
+### Medium Priority
+- [ ] Download view for generated ZIP files
+- [ ] Delete view with confirmation
+- [ ] Add AJAX download button to detail view
+- [ ] User profile endpoint
 - [ ] Add password reset functionality
 - [ ] Add email verification
-- [ ] Create API authentication (tokens/JWT)
-- [ ] Add user permissions and groups
 
-## Additional Features
+### Future Features
+- [ ] Progress tracking for generation
+- [ ] Background task queue (Celery)
+- [ ] Caching of generated networks
+- [ ] API authentication (tokens/JWT)
+- [ ] User permissions and groups
 - [ ] User profile picture upload
-- [ ] User bio/description field
 - [ ] Social media links
 - [ ] Two-factor authentication
+- [ ] Docker containerization
+
+## Completed Sessions
+### Session 1 (Dec 21, 2025)
+- Set up Networks app views (List, Detail, Create)
+- Created corresponding templates
+- Created generator module
+- Implemented network generation with C++ tool
+- Wrote comprehensive documentation
+- ✓ All tests passing

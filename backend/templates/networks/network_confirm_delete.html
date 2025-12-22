@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Delete Network</h1>
+
+<div>
+    <p>Are you sure you want to delete the network <strong>{{ network.name }}</strong>?</p>
+    <p>This action cannot be undone.</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+    <a href="{% url 'networks:detail' network.pk %}">Cancel</a>
+</form>
+{% endblock %}

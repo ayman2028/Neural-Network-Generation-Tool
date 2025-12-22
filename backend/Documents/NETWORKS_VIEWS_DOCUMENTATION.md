@@ -34,16 +34,23 @@ This document tracks all views, URL patterns, templates, and redirect flows for 
 - **File:** `networks/views.py`
 
 ### 4. NetworkDownloadView (PENDING)
-- **Status:** Not yet implemented (URL commented out)
-- **Expected Type:** Likely a `View` or `DetailView`
-- **Purpose:** Download generated network files as ZIP
+- **Type:** `View`
+- **Model:** `NetworkConfig`
+- **Purpose:** Download generated network files as ZIP via AJAX
 - **URL Parameter:** `pk` (network ID)
+- **Returns:** FileResponse with ZIP file
+- **Status:** Not yet implemented
+- **File:** `networks/views.py`
 
 ### 5. NetworkDeleteView (PENDING)
-- **Status:** Not yet implemented (URL commented out)
-- **Expected Type:** `DeleteView`
-- **Purpose:** Delete a network from the database
+- **Type:** `DeleteView`
+- **Model:** `NetworkConfig`
+- **Template:** `networks/network_confirm_delete.html`
+- **Purpose:** Delete a network from the database with confirmation
 - **URL Parameter:** `pk` (network ID)
+- **Redirect:** Back to `network_list` after deletion
+- **Status:** Not yet implemented
+- **File:** `networks/views.py`
 
 ---
 
