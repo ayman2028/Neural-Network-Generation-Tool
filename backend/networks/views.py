@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.urls import reverse_lazy
 from django.http import FileResponse, Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from pathlib import Path
 from .models import NetworkConfig
 from .forms import NetworkConfigForm  # Import custom form for network creation
@@ -156,7 +157,22 @@ class NetworkCreateView(CreateView):
         return reverse_lazy('networks:detail', kwargs={'pk': self.object.pk})
 
 
+class DashboardView(LoginRequiredMixin, TemplateView):
+    """
+    User dashboard showing their networks and quick actions.
+    Only accessible to authenticated users.
+    """
+    template_name = 'networks/dashboard.html'
+    login_url = 'login'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['networks'] = NetworkConfig.objects.all()
+        return context
+
+
 # Create function-based view wrappers for URLs
 network_list = NetworkListView.as_view()
 network_detail = NetworkDetailView.as_view()
 network_create = NetworkCreateView.as_view()
+dashboard = DashboardView.as_view()

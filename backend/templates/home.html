@@ -3,13 +3,16 @@
 {% block content %}
     {% if user.is_authenticated %}
         <h1>Welcome, {{ user.username }}!</h1>
-        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
+        <div style="margin: 20px 0;">
+            <a href="{% url 'networks:dashboard' %}" style="margin-right: 10px;">Go to Dashboard</a>
+            <a href="{% url 'networks:list' %}" style="margin-right: 10px;">View Networks</a>
+            <a href="{% url 'networks:create' %}" style="margin-right: 10px;">Create Network</a>
+        </div>
     {% else %}
         <h1>Welcome to the Neural Network Generation Tool</h1>
-        <p>Please <a href="{% url 'login' %}">log in</a> to access your dashboard.</p>
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+        <p>Log in to access your personalized dashboard.</p>
+        <hr>
+        <h2>Browse as a Guest</h2>
+        <p>You can <a href="{% url 'networks:list' %}">view available networks</a>, <a href="{% url 'networks:create' %}">create networks</a>, and download files without logging in.</p>
     {% endif %}
 {% endblock %} 

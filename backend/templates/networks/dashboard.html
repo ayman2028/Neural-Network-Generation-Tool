@@ -1,15 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Neural Networks</h1>
+<h1>Dashboard</h1>
+<p>Welcome, {{ user.username }}!</p>
 
-<a href="{% url 'networks:create' %}" class="btn btn-primary">Create New Network</a>
+<div style="margin: 20px 0;">
+    <a href="{% url 'networks:list' %}" style="margin-right: 10px;">View All Networks</a>
+    <a href="{% url 'networks:create' %}" style="margin-right: 10px;">Create New Network</a>
+    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<h2>Your Networks</h2>
 
 {% if networks %}
     <div class="networks-container" style="margin-top: 20px;">
         {% for network in networks %}
             <div class="network-card" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px;">
-                <h2>{{ network.name }}</h2>
+                <h3>{{ network.name }}</h3>
                 <p><strong>Description:</strong> {{ network.description }}</p>
                 
                 <div class="network-parameters" style="background-color: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 3px;">
@@ -39,12 +49,12 @@
                 </p>
                 
                 <div class="actions" style="margin-top: 10px;">
-                    <a href="{% url 'networks:detail' network.pk %}" class="btn btn-info">View Details</a>
+                    <a href="{% url 'networks:detail' network.pk %}">View Details</a>
                 </div>
             </div>
         {% endfor %}
     </div>
 {% else %}
-    <p>No networks found. <a href="{% url 'networks:create' %}">Create one now!</a></p>
+    <p>No networks yet. <a href="{% url 'networks:create' %}">Create one now!</a></p>
 {% endif %}
 {% endblock %}

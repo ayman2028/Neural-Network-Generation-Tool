@@ -4,6 +4,9 @@ from . import views
 app_name = 'networks'
 
 urlpatterns = [
+    # Dashboard (authenticated users only)
+    path('dashboard/', views.dashboard, name='dashboard'),
+    
     # List all networks
     path('', views.network_list, name='list'),
     
