@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.network_list, name='list'),
     
     # Network detail view
+    #also handles file download via POST method.
     path('<int:pk>/', views.network_detail, name='detail'),
     
     # Create and generate network (POST) / View creation form (GET)

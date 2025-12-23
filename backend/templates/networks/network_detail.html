@@ -17,6 +17,24 @@
     {% endif %}
 </div>
 
+<!-- Download Section -->
+<div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+    {% if network.generated_files_path %}
+        <h3>Download Generated Files</h3>
+        <p>Click the button below to download the generated network files as a ZIP archive.</p>
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                📥 Download Files
+            </button>
+        </form>
+    {% else %}
+        <h3>Files Not Generated</h3>
+        <p>Network files have not been generated yet. Files are automatically generated when a network is created.</p>
+        <a href="{% url 'networks:create' %}" class="btn btn-info">Create New Network</a>
+    {% endif %}
+</div>
+
 <div>
     <a href="{% url 'networks:list' %}">Back to Networks</a>
 </div>

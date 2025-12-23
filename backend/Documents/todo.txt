@@ -24,7 +24,11 @@
 - [x] Create templates (list, detail, form)
 - [x] Set up URL patterns (3/5 active)
 - [x] Documentation created
-- [ ] Implement NetworkDownloadView
+- [x] Implement NetworkDownloadView (integrated into DetailView as POST method)
+  - [x] Fixed ZIP creation to include all SV files recursively
+  - [x] Validated SV file presence in ZIP archives
+  - [x] Ensured network-specific file isolation (no duplicate folders)
+  - [x] 10 comprehensive tests (all passing)
 - [ ] Implement NetworkDeleteView
 - [ ] Create delete confirmation template
 
@@ -37,12 +41,14 @@
 - [x] Write unit tests
 - [x] Write integration tests
 - [x] Document module
+- [x] Integrate generator into NetworkCreateView (synchronous)
 
 ## Next Steps (PRIORITY ORDER)
 
 ### High Priority
+- [ ] Optimize CreateView with Celery for async generation (currently synchronous - may block on slow generations)
+- [ ] Fix file path storage for Docker compatibility (use BASE_DIR-relative or absolute paths instead of relative paths)
 - [ ] Add "Generate Files" button to DetailView
-- [ ] Integrate generator.generate_network() into CreateView or post-creation hook
 - [ ] Handle user weight input (currently using dummy values)
 - [ ] Test end-to-end flow: Create → Generate → Download
 - [ ] Add error handling and user feedback

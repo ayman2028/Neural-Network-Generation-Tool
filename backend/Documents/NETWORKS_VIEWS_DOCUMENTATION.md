@@ -20,18 +20,40 @@ This document tracks all views, URL patterns, templates, and redirect flows for 
 - **Model:** `NetworkConfig`
 - **Template:** `networks/network_detail.html`
 - **Context Variable:** `network`
-- **Purpose:** Display detailed information about a single network
+- **Purpose:** Display detailed information about a single network and provide download functionality
 - **URL Parameter:** `pk` (network ID)
+- **HTTP Methods:**
+  - **GET**: Display network configuration page with download button (if files exist)
+  - **POST**: Download generated network files as ZIP
 - **File:** `networks/views.py`
+- **Download Functionality:**
+  - POST method downloads generated ZIP file
+  - Filename format: `network_{name}_{mode}_{input_size}.zip` (spaces replaced with underscores)
+  - Validates that `generated_files_path` is set (returns 404 if empty)
+  - Validates that file exists on disk (returns 404 if missing)
+  - Returns FileResponse with proper Content-Type and Content-Disposition headers
+  - Handles errors with helpful user-facing messages
 
 ### 3. NetworkCreateView
 - **Type:** `CreateView`
 - **Model:** `NetworkConfig`
 - **Template:** `networks/network_form.html`
-- **Form Fields:** `name`, `description`, `mode`, `input_size`, `T`, `R`
+- **Form Class:** `NetworkConfigForm` (custom form with B field and parameter population)
+- **Form Fields:** `name`, `description`, `mode`, `input_size`, `T`, `R`, `B`
 - **Purpose:** Display form to create a new network and save to database
+- **Additional Functionality:** 
+  - Automatically calls `generator.generate_network()` after form submission
+  - Populates mode-specific parameters **only on successful generation**:
+    - **Mode 1/2**: Sets `output_size` (M) = input_size, `P` = 1 for Mode 1
+    - **Mode 3**: Sets `layer_sizes` = [input_size, input_size, 1]
+  - Stores path to generated ZIP file in `generated_files_path`
+- **Generation Flow:** Form submission → Save to DB → Generate files → Populate parameters → Save updated record → Redirect to detail view
+- **Error Handling:** Generation errors are logged but don't prevent network creation. Parameters remain empty/null if generation fails (no partial data).
+- **B Parameter:** Default value 10 (multiplier budget for Mode 3 optimization). Users can customize.
 - **Redirect:** Redirects to `network_detail` with the newly created network's ID
 - **File:** `networks/views.py`
+- **Status:** ✓ Fully implemented with automatic file generation and parameter population
+- **Tests:** ✓ 12 dedicated tests covering all functionality
 
 ### 4. NetworkDownloadView (PENDING)
 - **Type:** `View`
@@ -109,16 +131,24 @@ All templates extend `base.html`
 
 ## Model Fields Used
 
-From `NetworkConfig` model:
-- `name` - Network name
+### Form Input Fields
+- `name` - Network name (required)
 - `description` - Optional description
-- `mode` - Generation mode (1, 2, or 3)
-- `input_size` - Input dimension
-- `T` - Bit width
+- `mode` - Generation mode (1, 2, or 3) (required)
+- `input_size` - Input dimension (N) (required)
+- `T` - Bit width (required)
 - `R` - ReLU activation (boolean)
+- `B` - Multiplier budget (default: 10, used for Mode 3 optimization)
+
+### Auto-Populated Fields (after successful generation)
+- `output_size` - Output dimension (M) - Mode 1/2 only. Set to input_size.
+- `P` - Parallelism factor - Mode 1/2 only. Set to 1 for Mode 1.
+- `layer_sizes` - List of layer dimensions [M1, M2, M3] - Mode 3 only.
+- `generated_files_path` - Path to generated ZIP file.
+
+### Metadata
 - `created_at` - Auto-populated timestamp
 - `updated_at` - Auto-populated timestamp
-- `generated_files_path` - Optional path to generated files
 
 ---
 
