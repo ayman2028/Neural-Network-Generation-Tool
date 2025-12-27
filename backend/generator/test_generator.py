@@ -21,7 +21,7 @@ def test_executable_exists():
     """Test that the main executable exists"""
     print("Testing: Executable existence...")
     try:
-        exe_path = get_executable_path('main.exe')
+        exe_path = get_executable_path('main')
         print(f"✓ Executable found: {exe_path}")
         return True
     except GenerationError as e:
@@ -62,7 +62,7 @@ def test_executable_callable():
     print("\nTesting: Executable callable...")
     try:
         import subprocess
-        exe_path = get_executable_path('main.exe')
+        exe_path = get_executable_path('main')
         
         # Try to run with --help or without args to see if it responds
         result = subprocess.run(

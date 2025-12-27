@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: neural-network-tool
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/generator/outputs:/app/generator/outputs
+      - ./backend/db.sqlite3:/app/db.sqlite3
+    environment:
+      - DEBUG=True
+      - OUTPUT_DIR=/app/generator/outputs
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - PYTHONUNBUFFERED=1
+    command: python manage.py runserver 0.0.0.0:8000
+    stdin_open: true
+    tty: true

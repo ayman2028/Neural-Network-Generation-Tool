@@ -24,6 +24,8 @@ def get_executable_path(executable_name='main'):
     """
     Get the full path to the C++ executable
     
+    Works on both Windows (main.exe) and Linux (main)
+    
     Args:
         executable_name: Name of the executable (default: 'main')
     
@@ -33,17 +35,25 @@ def get_executable_path(executable_name='main'):
     Raises:
         GenerationError: If executable not found
     """
-    # Try with and without .exe extension
-    exe_path = get_generator_base_path() / executable_name
+    base_path = get_generator_base_path()
     
-    if not exe_path.exists() and not executable_name.endswith('.exe'):
-        # Try with .exe extension
-        exe_path = get_generator_base_path() / (executable_name + '.exe')
+    # Try without extension first (Linux)
+    exe_path = base_path / executable_name
+    if exe_path.exists():
+        return exe_path
     
-    if not exe_path.exists():
-        raise GenerationError(f"Executable not found: {exe_path}")
+    # Try with .exe extension (Windows)
+    if not executable_name.endswith('.exe'):
+        exe_path = base_path / (executable_name + '.exe')
+        if exe_path.exists():
+            return exe_path
     
-    return exe_path
+    # If not found, raise error with helpful message
+    raise GenerationError(
+        f"Executable not found: {executable_name}\n"
+        f"Searched in: {base_path}\n"
+        f"Looking for: {executable_name} or {executable_name}.exe"
+    )
 
 
 def generate_network(network_config, output_dir=None):
@@ -52,7 +62,7 @@ def generate_network(network_config, output_dir=None):
     
     Args:
         network_config: NetworkConfig model instance
-        output_dir: Directory to store generated files (optional)
+        output_dir: Directory to store generated files (optional, uses OUTPUT_DIR env var if set)
     
     Returns:
         Path to generated ZIP file
@@ -61,7 +71,12 @@ def generate_network(network_config, output_dir=None):
         GenerationError: If generation fails
     """
     if output_dir is None:
-        output_dir = get_generator_base_path() / 'outputs'
+        # Check for OUTPUT_DIR environment variable first
+        env_output_dir = os.getenv('OUTPUT_DIR')
+        if env_output_dir:
+            output_dir = env_output_dir
+        else:
+            output_dir = get_generator_base_path() / 'outputs'
     
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
