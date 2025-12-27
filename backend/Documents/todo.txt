@@ -64,13 +64,22 @@
 ### Future Features
 - [ ] Progress tracking for generation
 - [ ] Background task queue (Celery)
-- [ ] Caching of generated networks
 - [ ] API authentication (tokens/JWT)
 - [ ] User permissions and groups
 - [ ] User profile picture upload
 - [ ] Social media links
 - [ ] Two-factor authentication
 - [ ] Docker containerization
+
+## Redis Caching (IN PROGRESS)
+- [x] Install and configure django-redis
+- [x] Add graceful fallback (IGNORE_EXCEPTIONS: True)
+- [x] Enable site-wide caching with middleware
+- [x] Create Redis documentation and examples
+- [ ] **OPTIMIZE: Refine caching from site-wide to per-view** - Remove middleware, use @cache_page decorator on specific views (network_list, network_detail, dashboard). Avoid caching POST requests, authenticated user-specific content, and forms.
+- [ ] **DOCUMENT: Establish cache key naming convention** - Create patterns like 'network_{id}', 'dashboard_{user_id}'. Add guidelines in REDIS_LOCAL_SETUP.md
+- [ ] **IMPLEMENT: Add cache invalidation strategy** - Use Django signals in models.py to automatically clear related cache keys when networks are created, updated, or deleted
+- [ ] **MONITOR: Track cache performance** - Add logging for hit/miss rates, create management command for cache statistics, health check endpoint for Redis connection status
 
 ## Completed Sessions
 ### Session 1 (Dec 21, 2025)
