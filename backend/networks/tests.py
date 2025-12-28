@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from unittest.mock import patch, MagicMock
 from .models import NetworkConfig
 from .forms import NetworkConfigForm
+from django_redis import get_redis_connection
 
 
 User = get_user_model()
@@ -984,3 +985,185 @@ class NetworkDetailViewDownloadTestCase(TestCase):
             
             self.assertIn('No SystemVerilog', str(context.exception))
 
+
+class NetworkCreateViewRateLimitTestCase(TestCase):
+    """Test suite for NetworkCreateView rate limiting (3 requests per 60 seconds per IP)"""
+    
+    def setUp(self):
+        """Set up test client and Redis connection"""
+        self.client.defaults['REMOTE_ADDR'] = '192.168.1.100'  # Simulate client IP
+        self.redis = get_redis_connection("default")
+        # Clear rate limit keys before each test
+        self.redis.flushdb()
+    
+    def tearDown(self):
+        """Clean up Redis after each test"""
+        self.redis.flushdb()
+    
+    def _get_network_form_data(self, name_suffix=''):
+        """Helper to generate network form data"""
+        return {
+            'name': f'Test Network{name_suffix}',
+            'description': 'Test network for rate limiting',
+            'mode': 1,
+            'input_size': 8,
+            'output_size': 10,
+            'T': 16,
+            'R': False,
+            'P': 1
+        }
+    
+    @patch('networks.views.generate_network')
+    def test_create_3_networks_succeeds(self, mock_generate):
+        """Test that creating 3 networks within rate limit succeeds"""
+        mock_generate.return_value = '/tmp/test.zip'
+        
+        # First 3 requests should succeed (200)
+        for i in range(3):
+            response = self.client.post(
+                reverse('networks:create'),
+                data=self._get_network_form_data(f'_{i}'),
+                follow=True
+            )
+            self.assertIn(
+                response.status_code,
+                [200, 302],  # 200 for form display, 302 for redirect
+                f"Request {i+1} failed with status {response.status_code}"
+            )
+    
+    @patch('networks.views.generate_network')
+    def test_create_4th_network_fails_rate_limit(self, mock_generate):
+        """Test that 4th network creation within 60 seconds returns 429"""
+        mock_generate.return_value = '/tmp/test.zip'
+        
+        # Make 3 successful requests
+        for i in range(3):
+            response = self.client.post(
+                reverse('networks:create'),
+                data=self._get_network_form_data(f'_{i}'),
+                follow=False
+            )
+        
+        # 4th request should be rate limited (429)
+        response = self.client.post(
+            reverse('networks:create'),
+            data=self._get_network_form_data('_4'),
+            follow=False
+        )
+        
+        # Check for 429 status code
+        self.assertEqual(
+            response.status_code,
+            429,
+            f"Expected 429 rate limit, got {response.status_code}"
+        )
+    
+    @patch('networks.views.generate_network')
+    def test_rate_limit_headers_present(self, mock_generate):
+        """Test that rate limit headers are present in response"""
+        mock_generate.return_value = '/tmp/test.zip'
+        
+        response = self.client.post(
+            reverse('networks:create'),
+            data=self._get_network_form_data('_1'),
+            follow=False
+        )
+        
+        # Check for rate limit headers
+        self.assertIn('X-RateLimit-Limit', response)
+        self.assertIn('X-RateLimit-Remaining', response)
+        self.assertIn('X-RateLimit-Reset', response)
+        
+        # Verify header values
+        self.assertEqual(response['X-RateLimit-Limit'], '3')
+        # Remaining should be 2 (1 request made, 3 total allowed)
+        self.assertEqual(response['X-RateLimit-Remaining'], '2')
+    
+    @patch('networks.views.generate_network')
+    def test_rate_limit_remaining_decreases(self, mock_generate):
+        """Test that X-RateLimit-Remaining header decreases with each request"""
+        mock_generate.return_value = '/tmp/test.zip'
+        
+        remaining_values = []
+        
+        for i in range(3):
+            response = self.client.post(
+                reverse('networks:create'),
+                data=self._get_network_form_data(f'_{i}'),
+                follow=False
+            )
+            remaining = int(response.get('X-RateLimit-Remaining', 0))
+            remaining_values.append(remaining)
+        
+        # Should start at 2 (3 allowed - 1 request)
+        # Then 1 (3 allowed - 2 requests)
+        # Then 0 (3 allowed - 3 requests)
+        self.assertEqual(remaining_values, [2, 1, 0])
+    
+    @patch('networks.views.generate_network')
+    def test_rate_limit_message_on_429(self, mock_generate):
+        """Test that 429 response includes helpful rate limit message"""
+        mock_generate.return_value = '/tmp/test.zip'
+        
+        # Make 3 requests to hit the limit
+        for i in range(3):
+            self.client.post(
+                reverse('networks:create'),
+                data=self._get_network_form_data(f'_{i}'),
+                follow=False
+            )
+        
+        # 4th request should include message
+        response = self.client.post(
+            reverse('networks:create'),
+            data=self._get_network_form_data('_4'),
+            follow=False
+        )
+        
+        self.assertEqual(response.status_code, 429)
+        # Response should contain helpful message
+        self.assertIn(
+            b'Rate limit exceeded',
+            response.content
+        )
+        self.assertIn(
+            b'3 requests per 60 seconds',
+            response.content
+        )
+    
+    @patch('networks.views.generate_network')
+    def test_different_ips_have_separate_limits(self, mock_generate):
+        """Test that different IPs get separate rate limit counters"""
+        mock_generate.return_value = '/tmp/test.zip'
+        
+        # Client 1: Make 3 requests with IP 192.168.1.100
+        self.client.defaults['REMOTE_ADDR'] = '192.168.1.100'
+        for i in range(3):
+            response = self.client.post(
+                reverse('networks:create'),
+                data=self._get_network_form_data(f'_ip1_{i}'),
+                follow=False
+            )
+        
+        # Client 2: Make 3 requests with DIFFERENT IP - should succeed
+        self.client.defaults['REMOTE_ADDR'] = '192.168.1.200'
+        for i in range(3):
+            response = self.client.post(
+                reverse('networks:create'),
+                data=self._get_network_form_data(f'_ip2_{i}'),
+                follow=False
+            )
+            # Should be successful for the 2nd IP
+            self.assertNotEqual(
+                response.status_code,
+                429,
+                f"Request {i+1} from different IP was rate limited (should not be)"
+            )
+        
+        # Client 2: 4th request should now be rate limited
+        response = self.client.post(
+            reverse('networks:create'),
+            data=self._get_network_form_data('_ip2_4'),
+            follow=False
+        )
+        self.assertEqual(response.status_code, 429)

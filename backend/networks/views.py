@@ -3,10 +3,12 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.urls import reverse_lazy
 from django.http import FileResponse, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from pathlib import Path
 from .models import NetworkConfig
 from .forms import NetworkConfigForm  # Import custom form for network creation
 from generator.generator import generate_network, GenerationError
+from utils import rate_limit
 
 
 class NetworkListView(ListView):
@@ -80,12 +82,22 @@ class NetworkCreateView(CreateView):
     2. Saves the configuration to the database
     3. Automatically generates network files using the C++ generator
     4. Stores the path to generated files in the model for later download/reference
+    
+    Rate limiting: 3 requests per 60 seconds per IP address
     """
     
     model = NetworkConfig
     template_name = 'networks/network_form.html'
     # Use custom form that includes the B (multiplier budget) parameter
     form_class = NetworkConfigForm
+    
+    @method_decorator(rate_limit())
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST request for form submission with rate limiting.
+        Rate limit: 3 requests per 60 seconds per IP address
+        """
+        return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
         """
