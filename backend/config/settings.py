@@ -133,6 +133,29 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+# Celery Configuration (with Redis fallback)
+import redis
+try:
+    # Try to connect to Redis
+    redis_client = redis.Redis(host='127.0.0.1', port=6379, db=0, socket_connect_timeout=1)
+    redis_client.ping()
+    # Redis is available
+    CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'  # Use DB 1 for Celery (separate from cache)
+    CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/2'  # Use DB 2 for results
+except (redis.ConnectionError, redis.TimeoutError):
+    # Redis not available, use in-memory backend
+    CELERY_BROKER_URL = 'memory://'
+    CELERY_RESULT_BACKEND = 'cache+memory://'
+    CELERY_ALWAYS_EAGER = True  # Execute tasks synchronously when Redis is down
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes hard time limit
+CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes soft time limit (allows graceful shutdown)
+
 # Redis Cache Configuration (Graceful Degradation)
 # If Redis is not running, the app will still work using dummy cache
 CACHES = {
