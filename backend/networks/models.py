@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class NetworkConfig(models.Model):
     """
@@ -29,7 +32,9 @@ class NetworkConfig(models.Model):
     ]
     
     # Metadata
-    name = models.CharField(max_length=255, help_text="Name of the neural network")
+    users = models.ManyToManyField(User, blank=True, related_name='networks', help_text="Users who have created/contributed to this network")
+    name = models.CharField(max_length=255, unique=True, help_text="User-defined name of the neural network")
+    generated_name = models.CharField(max_length=255, unique=True, help_text="Auto-generated name based on configuration parameters")
     description = models.TextField(blank=True, help_text="Optional description of the network")
     mode = models.IntegerField(choices=MODE_CHOICES, help_text="Generation mode (1, 2, or 3)")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -68,6 +73,25 @@ class NetworkConfig(models.Model):
     # B = Multiplier budget (optimization parameter for Mode 3)
     # Position 7 in Mode 3 filename: net_{N}_{M1}_{M2}_{M3}_{T}_{R}_{B}
     B = models.IntegerField(null=True, blank=True, help_text="Multiplier budget (B) - Mode 3")
+    
+    def generate_name(self):
+        """Generate a unique name based on network configuration parameters."""
+        relu_str = "relu" if self.R else "norelu"
+        
+        if self.mode in [1, 2]:
+            # Mode 1/2: fc_{M}_{N}_{T}_{R}_{P}
+            return f"fc_{self.output_size}_{self.input_size}_{self.T}_{int(self.R)}_{self.P}"
+        elif self.mode == 3:
+            # Mode 3: net_{N}_{M1}_{M2}_{M3}_{T}_{R}_{B}
+            layers = "_".join(map(str, self.layer_sizes)) if self.layer_sizes else "0_0_0"
+            return f"net_{self.input_size}_{layers}_{self.T}_{int(self.R)}_{self.B}"
+        return ""
+    
+    def save(self, *args, **kwargs):
+        """Auto-generate the generated_name field before saving."""
+        if not self.generated_name:
+            self.generated_name = self.generate_name()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.name} (Mode {self.mode})"

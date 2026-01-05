@@ -105,10 +105,12 @@ class NetworkCreateView(CreateView):
         
         This method:
         1. Saves the form data to the database (super().form_valid())
-        2. Calls the C++ generator with the network configuration
-        3. Populates mode-specific parameters (output_size, P, layer_sizes) after successful generation
-        4. Stores the path to generated ZIP file in the model
-        5. Handles generation errors gracefully (doesn't fail network creation)
+        2. Sets the user field if the user is authenticated
+        3. Generates a unique name based on network parameters
+        4. Calls the C++ generator with the network configuration
+        5. Populates mode-specific parameters (output_size, P, layer_sizes) after successful generation
+        6. Stores the path to generated ZIP file in the model
+        7. Handles generation errors gracefully (doesn't fail network creation)
         
         Args:
             form: The validated NetworkConfigForm instance
@@ -117,6 +119,13 @@ class NetworkCreateView(CreateView):
             The HTTP response from the parent class (typically a redirect)
         """
         response = super().form_valid(form)
+        
+        # Set the user to the currently authenticated user if logged in
+        if self.request.user.is_authenticated:
+            self.object.users.add(self.request.user)
+        
+        # Generate the unique name based on network parameters
+        self.object.generated_name = self.object.generate_name()
         
         # Generate network files
         try:
@@ -153,7 +162,8 @@ class NetworkCreateView(CreateView):
                 'generated_files_path', 
                 'output_size', 
                 'P', 
-                'layer_sizes'
+                'layer_sizes',
+                'generated_name'
             ])
             
             print(f"Successfully generated network files: {zip_file_path}")
@@ -179,7 +189,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['networks'] = NetworkConfig.objects.all()
+        context['networks'] = self.request.user.networks.all()
         return context
 
 
