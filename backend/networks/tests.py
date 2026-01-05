@@ -40,6 +40,45 @@ class NetworkConfigTestCase(TestCase):
         self.assertEqual(network.layer_sizes, [])
         self.assertIsNone(network.B)
     
+    def test_generated_name_auto_generation_mode1(self):
+        """Test that generated_name is auto-generated for Mode 1"""
+        network = NetworkConfig.objects.create(
+            name="Test Mode 1 Name",
+            mode=1,
+            input_size=8,
+            output_size=10,
+            T=16,
+            R=False,
+            P=1
+        )
+        # generated_name should be auto-generated as fc_{M}_{N}_{T}_{R}_{P}
+        expected_name = "fc_10_8_16_0_1"
+        self.assertEqual(network.generated_name, expected_name)
+    
+    def test_generated_name_unique(self):
+        """Test that generated_name must be unique"""
+        network1 = NetworkConfig.objects.create(
+            name="Network 1",
+            mode=1,
+            input_size=8,
+            output_size=10,
+            T=16,
+            R=False,
+            P=1
+        )
+        # Attempting to create a network with the same parameters should fail
+        # because generated_name would be identical
+        with self.assertRaises(Exception):
+            NetworkConfig.objects.create(
+                name="Network 2",
+                mode=1,
+                input_size=8,
+                output_size=10,
+                T=16,
+                R=False,
+                P=1
+            )
+    
     def test_mode1_string_representation(self):
         """Test __str__ method for Mode 1 network"""
         network = NetworkConfig.objects.create(
@@ -262,6 +301,70 @@ class NetworkConfigTestCase(TestCase):
             T=16
         )
         self.assertIsNotNone(network.updated_at)
+    
+    # ========== User Relationship Tests ==========
+    def test_network_users_many_to_many(self):
+        """Test that a network can have multiple users"""
+        user1 = User.objects.create_user(username='user1', email='user1@test.com', password='testpass')
+        user2 = User.objects.create_user(username='user2', email='user2@test.com', password='testpass')
+        
+        network = NetworkConfig.objects.create(
+            name="Shared Network",
+            mode=1,
+            input_size=8,
+            output_size=10,
+            T=16
+        )
+        
+        # Add users to the network
+        network.users.add(user1, user2)
+        
+        # Check that both users are associated
+        self.assertEqual(network.users.count(), 2)
+        self.assertIn(user1, network.users.all())
+        self.assertIn(user2, network.users.all())
+    
+    def test_user_networks_reverse_relationship(self):
+        """Test that users can access their networks via reverse relationship"""
+        user = User.objects.create_user(username='testuser', email='test@test.com', password='testpass')
+        
+        network1 = NetworkConfig.objects.create(
+            name="User Network 1",
+            mode=1,
+            input_size=8,
+            output_size=10,
+            T=16
+        )
+        network2 = NetworkConfig.objects.create(
+            name="User Network 2",
+            mode=2,
+            input_size=6,
+            output_size=8,
+            T=16,
+            P=2
+        )
+        
+        # Add networks to user
+        network1.users.add(user)
+        network2.users.add(user)
+        
+        # Verify reverse relationship works
+        user_networks = user.networks.all()
+        self.assertEqual(user_networks.count(), 2)
+        self.assertIn(network1, user_networks)
+        self.assertIn(network2, user_networks)
+    
+    def test_network_with_no_users(self):
+        """Test that a network can exist without any users"""
+        network = NetworkConfig.objects.create(
+            name="No Users Network",
+            mode=1,
+            input_size=8,
+            output_size=10,
+            T=16
+        )
+        
+        self.assertEqual(network.users.count(), 0)
     
     # ========== Edge Cases ==========
     def test_large_input_size(self):
@@ -637,6 +740,62 @@ class NetworkCreateViewTestCase(TestCase):
         
         network = NetworkConfig.objects.first()
         self.assertEqual(network.B, 10)
+    
+    @patch('networks.views.generate_network')
+    def test_create_view_generates_name(self, mock_generate):
+        """Test that generated_name is auto-generated on network creation"""
+        mock_generate.return_value = '/path/to/network_1.zip'
+        
+        form_data = {
+            'name': 'Generated Name Test',
+            'mode': 1,
+            'input_size': 8,
+            'output_size': 10,
+            'T': 16,
+            'R': False,
+            'P': 1
+        }
+        self.client.post(reverse('networks:create'), form_data)
+        
+        network = NetworkConfig.objects.first()
+        # Should be auto-generated as fc_{M}_{N}_{T}_{R}_{P}
+        self.assertEqual(network.generated_name, "fc_10_8_16_0_1")
+    
+    @patch('networks.views.generate_network')
+    def test_create_view_adds_user_if_authenticated(self, mock_generate):
+        """Test that authenticated user is added to network.users"""
+        mock_generate.return_value = '/path/to/network_1.zip'
+        
+        form_data = {
+            'name': 'User Test Network',
+            'mode': 1,
+            'input_size': 8,
+            'T': 16,
+            'R': False
+        }
+        self.client.post(reverse('networks:create'), form_data)
+        
+        network = NetworkConfig.objects.first()
+        # User should be added since they're authenticated
+        self.assertEqual(network.users.count(), 1)
+        self.assertIn(self.user, network.users.all())
+    
+    def test_create_view_no_user_if_anonymous(self):
+        """Test that network has no users if created by anonymous user"""
+        self.client.logout()
+        
+        form_data = {
+            'name': 'Anonymous Network',
+            'mode': 1,
+            'input_size': 8,
+            'T': 16,
+            'R': False
+        }
+        self.client.post(reverse('networks:create'), form_data)
+        
+        network = NetworkConfig.objects.first()
+        # No user should be added since request was anonymous
+        self.assertEqual(network.users.count(), 0)
 
 
 class NetworkDetailViewDownloadTestCase(TestCase):
