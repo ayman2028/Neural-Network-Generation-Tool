@@ -17,12 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from config.health_check import health_check, liveness, readiness
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')), #We include this for signup and login functionality
     path('accounts/', include('django.contrib.auth.urls')),
     path('networks/', include('networks.urls')),  # Neural network generation app
+    
+    # Health check endpoints for Docker and monitoring
+    path('health', health_check, name='health_check'),
+    path('health/live', liveness, name='liveness'),
+    path('health/ready', readiness, name='readiness'),
+    
     #For now we will use a shortcut to a simple home page using a TemplateView
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

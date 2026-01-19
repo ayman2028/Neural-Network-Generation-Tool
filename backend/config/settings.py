@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!up8@oz%2cnrccqb@8a10fm&eor%m^c60cvvun*fr$-q7)j5_x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Allow all hosts in development
 
 
 # Application definition
@@ -121,6 +121,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
+
+# Media files (User uploads)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR.parent / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -136,12 +141,12 @@ LOGOUT_REDIRECT_URL = 'home'
 # Celery Configuration (with Redis fallback)
 import redis
 try:
-    # Try to connect to Redis
-    redis_client = redis.Redis(host='127.0.0.1', port=6379, db=0, socket_connect_timeout=1)
+    # Try to connect to Redis (using Docker hostname)
+    redis_client = redis.Redis(host='redis', port=6379, db=0, socket_connect_timeout=1)
     redis_client.ping()
     # Redis is available
-    CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'  # Use DB 1 for Celery (separate from cache)
-    CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/2'  # Use DB 2 for results
+    CELERY_BROKER_URL = 'redis://redis:6379/1'  # Use DB 1 for Celery (separate from cache)
+    CELERY_RESULT_BACKEND = 'redis://redis:6379/2'  # Use DB 2 for results
 except (redis.ConnectionError, redis.TimeoutError):
     # Redis not available, use in-memory backend
     CELERY_BROKER_URL = 'memory://'
@@ -161,7 +166,7 @@ CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes soft time limit (allows grac
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/0',
+        'LOCATION': 'redis://redis:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'SOCKET_CONNECT_TIMEOUT': 5,

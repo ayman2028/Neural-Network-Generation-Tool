@@ -57,6 +57,7 @@
 - [ ] Download view for generated ZIP files
 - [ ] Delete view with confirmation
 - [ ] Add AJAX download button to detail view
+- [ ] **Refactor CSS to static files** - Extract inline styles from base.html and home.html to backend/static/css/style.css (can be done later)
 - [ ] User profile endpoint
 - [ ] Add password reset functionality
 - [ ] Add email verification

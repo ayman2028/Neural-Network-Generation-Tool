@@ -1,0 +1,32 @@
+version: '3.8'
+
+# Development overrides for docker-compose.yml
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+
+services:
+  web:
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    environment:
+      DEBUG: "True"
+    stdin_open: true
+    tty: true
+
+  celery:
+    command: celery -A config worker -l debug --concurrency=1
+
+  celery-beat:
+    command: celery -A config beat -l debug --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+  nginx:
+    environment:
+      - NGINX_PORT=8080
+    ports:
+      - "8080:80"
+
+  db:
+    ports:
+      - "5432:5432"
