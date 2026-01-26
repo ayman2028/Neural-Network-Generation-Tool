@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (RDS in production)
+  db:
+    image: postgres:15-alpine
+    container_name: neural-network-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-neural_network}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - neural-network
+
+  # Django Web Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neural-network-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DEBUG: ${DEBUG:-False}
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here-change-in-production}
+      DJANGO_SETTINGS_MODULE: config.settings
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-neural_network}
+      REDIS_URL: ${REDIS_URL:-redis://localhost:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
+      OUTPUT_DIR: /app/generator/outputs
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,web}
+    volumes:
+      - ./backend:/app
+      - neural_outputs:/app/generator/outputs
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - neural-network
+
+  # Celery Worker for async tasks
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neural-network-celery
+    depends_on:
+      - db
+    environment:
+      DEBUG: ${DEBUG:-False}
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here-change-in-production}
+      DJANGO_SETTINGS_MODULE: config.settings
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-neural_network}
+      REDIS_URL: ${REDIS_URL:-redis://localhost:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
+      OUTPUT_DIR: /app/generator/outputs
+    volumes:
+      - ./backend:/app
+      - neural_outputs:/app/generator/outputs
+    command: celery -A config worker -l info --concurrency=4
+    networks:
+      - neural-network
+
+  # Celery Beat (Scheduler) for periodic tasks
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neural-network-beat
+    depends_on:
+      - db
+    environment:
+      DEBUG: ${DEBUG:-False}
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here-change-in-production}
+      DJANGO_SETTINGS_MODULE: config.settings
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-neural_network}
+      REDIS_URL: ${REDIS_URL:-redis://localhost:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
+      OUTPUT_DIR: /app/generator/outputs
+    volumes:
+      - ./backend:/app
+    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    networks:
+      - neural-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: neural-network-nginx
+    depends_on:
+      - web
+    ports:
+      - "${NGINX_PORT:-80}:80"
+      - "${NGINX_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/app/staticfiles:ro
+      - media_volume:/app/media:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - neural-network
+
+volumes:
+  postgres_data:
+    driver: local
+  neural_outputs:
+    driver: local
+  static_volume:
+    driver: local
+  media_volume:
+    driver: local
+
+networks:
+  neural-network:
+    driver: bridge
