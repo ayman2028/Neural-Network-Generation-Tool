@@ -1,47 +1,28 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database (RDS in production)
-  db:
-    image: postgres:15-alpine
-    container_name: neural-network-db
-    environment:
-      POSTGRES_DB: ${DB_NAME:-neural_network}
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "${DB_PORT:-5432}:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - neural-network
-
   # Django Web Application
   web:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: neural-network-app
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       DEBUG: ${DEBUG:-False}
-      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here-change-in-production}
+      SECRET_KEY: ${SECRET_KEY}
       DJANGO_SETTINGS_MODULE: config.settings
-      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-neural_network}
-      REDIS_URL: ${REDIS_URL:-redis://localhost:6379/0}
-      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
-      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-neural_network}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_URL: ${REDIS_URL}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       PYTHONUNBUFFERED: 1
       PYTHONDONTWRITEBYTECODE: 1
       OUTPUT_DIR: /app/generator/outputs
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,web}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
     volumes:
       - ./backend:/app
       - neural_outputs:/app/generator/outputs
@@ -70,16 +51,18 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: neural-network-celery
-    depends_on:
-      - db
     environment:
       DEBUG: ${DEBUG:-False}
-      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here-change-in-production}
+      SECRET_KEY: ${SECRET_KEY}
       DJANGO_SETTINGS_MODULE: config.settings
-      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-neural_network}
-      REDIS_URL: ${REDIS_URL:-redis://localhost:6379/0}
-      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
-      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-neural_network}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_URL: ${REDIS_URL}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       PYTHONUNBUFFERED: 1
       PYTHONDONTWRITEBYTECODE: 1
       OUTPUT_DIR: /app/generator/outputs
@@ -96,16 +79,18 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: neural-network-beat
-    depends_on:
-      - db
     environment:
       DEBUG: ${DEBUG:-False}
-      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here-change-in-production}
+      SECRET_KEY: ${SECRET_KEY}
       DJANGO_SETTINGS_MODULE: config.settings
-      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-neural_network}
-      REDIS_URL: ${REDIS_URL:-redis://localhost:6379/0}
-      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://localhost:6379/1}
-      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://localhost:6379/2}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-neural_network}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_URL: ${REDIS_URL}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       PYTHONUNBUFFERED: 1
       PYTHONDONTWRITEBYTECODE: 1
       OUTPUT_DIR: /app/generator/outputs
@@ -133,8 +118,6 @@ services:
       - neural-network
 
 volumes:
-  postgres_data:
-    driver: local
   neural_outputs:
     driver: local
   static_volume:

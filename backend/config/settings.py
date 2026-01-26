@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #local 
+    # Third-party apps
+    'django_celery_beat',
+    'django_redis',
+
+    # Local apps
     'accounts',
     'networks',
 ]
@@ -156,20 +160,12 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Celery Configuration (with Redis fallback)
-import redis
-try:
-    # Try to connect to Redis (using Docker hostname)
-    redis_client = redis.Redis(host='redis', port=6379, db=0, socket_connect_timeout=1)
-    redis_client.ping()
-    # Redis is available
-    CELERY_BROKER_URL = 'redis://redis:6379/1'  # Use DB 1 for Celery (separate from cache)
-    CELERY_RESULT_BACKEND = 'redis://redis:6379/2'  # Use DB 2 for results
-except (redis.ConnectionError, redis.TimeoutError):
-    # Redis not available, use in-memory backend
-    CELERY_BROKER_URL = 'memory://'
-    CELERY_RESULT_BACKEND = 'cache+memory://'
-    CELERY_ALWAYS_EAGER = True  # Execute tasks synchronously when Redis is down
+# Redis Configuration
+REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
+
+# Celery Configuration
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/1')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/2')
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -179,12 +175,11 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes hard time limit
 CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes soft time limit (allows graceful shutdown)
 
-# Redis Cache Configuration (Graceful Degradation)
-# If Redis is not running, the app will still work using dummy cache
+# Redis Cache Configuration
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/0',
+        'LOCATION': REDIS_URL,
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'SOCKET_CONNECT_TIMEOUT': 5,
