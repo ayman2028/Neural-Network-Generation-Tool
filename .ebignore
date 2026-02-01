@@ -1,0 +1,68 @@
+# Local development
+.venv/
+.venv-1/
+.venv-2/
+.env
+.env.local
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg
+
+# Local database
+db.sqlite3
+*.sqlite3
+
+# Logs and reports
+logs/
+*.log
+report/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large files and archives
+*.mp4
+*.zip
+*.tar.gz
+*.rar
+
+# Documentation (optional, keep if needed for reference)
+# Documents/
+
+# Test files
+test_redis_setup.py
+*.test
+
+# Git
+.git/
+.gitignore
+
+# EB specific
+.elasticbeanstalk/
+.ebignore
+
+# Hardware Description Language files
+*.sv
+hdl/
+
