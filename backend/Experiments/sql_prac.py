@@ -338,7 +338,7 @@ def pract():
 if __name__ == "__main__":
     # Initialize database config from environment
     init_db_config()
-    pract()
+    #pract()
     #fill_test_users()
     #print("\n--- All Users ---")
     print_pract()
