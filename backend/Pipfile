@@ -11,6 +11,7 @@ celery = "*"
 django-celery-beat = "*"
 
 [dev-packages]
+awsebcli = "*"
 
 [requires]
-python_version = "3.13"
+python_version = "3.11"
