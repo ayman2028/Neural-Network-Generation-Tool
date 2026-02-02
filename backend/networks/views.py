@@ -5,10 +5,13 @@ from django.http import FileResponse, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from pathlib import Path
+import logging
 from .models import NetworkConfig
 from .forms import NetworkConfigForm  # Import custom form for network creation
 from generator.generator import generate_network, GenerationError
 from utils import rate_limit
+
+logger = logging.getLogger(__name__)
 
 
 class NetworkListView(ListView):
@@ -171,7 +174,14 @@ class NetworkCreateView(CreateView):
             # Log the error but don't fail the network creation
             # This ensures the user's configuration is saved even if generation fails
             # (e.g., due to invalid parameters or C++ tool issues)
-            print(f"Warning: Failed to generate network files: {e}")
+            error_msg = f"Failed to generate network files for {self.object.name} (ID: {self.object.id}): {e}"
+            logger.error(error_msg)
+            print(error_msg)
+        except Exception as e:
+            # Catch any unexpected errors during generation
+            error_msg = f"Unexpected error during network generation for {self.object.name} (ID: {self.object.id}): {e}"
+            logger.error(error_msg, exc_info=True)
+            print(error_msg)
         
         return response
     
