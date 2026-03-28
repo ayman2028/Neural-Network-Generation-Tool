@@ -1,2 +1,5 @@
+branch-defaults:
+  default:
+    environment: NeuralNetworkGenerator-env
 global:
   profile: null
