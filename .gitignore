@@ -31,6 +31,7 @@ venv/
 env/
 ENV/
 .venv
+.venv-*/
 .pipenv
 
 # IDE
@@ -39,6 +40,11 @@ ENV/
 *.swp
 *.swo
 *~
+
+# Logs and caches
+*.log
+.pytest_cache/
+.mypy_cache/
 
 # Django
 *.sqlite3
