@@ -32,9 +32,19 @@ class deleteFromEnd(Operation):
         """Create an add Operation with the text that was deleted."""
         return addToEnd(self.charsDeleted)
 
+class replaceAndASnap(Operation):
+    def __init__(self, chars: str):
+        self.newDoc = chars
+        self.oldDoc = ""
+    def apply(self, text):
+        self.oldDoc = text
+        return self.newDoc
+    def rollbackOperation(self):
+        return replaceAndASnap(self.oldDoc)
+
 class TextEditor:
     def __init__(self):
-        self.text = ""
+        self.doc = Document()
         self.undo_limit = 10
         self.undo_stack : list[Operation] = []
         self.redo_stack : list[Operation] = []
@@ -55,15 +65,12 @@ class TextEditor:
         Then it clears the redo stack.
         EC: Operation results in no changes. Stacks are full.
         """
-
-        newText = Op.apply(self.text)
-        if self.text == newText:
-            return
-        self.text = newText
-
-        rollbackOp = Op.rollbackOperation()
-        self.addUndo(rollbackOp)
+        rollBack =  self.doc.apply(Op)
+        if not rollBack: return None
+        self.addUndo(rollBack)
         self.redo_stack.clear()
+
+        
     
     def undo(self):
         """
@@ -73,18 +80,25 @@ class TextEditor:
         if not self.undo_stack: return
         
         undoOp = self.undo_stack.pop()
-        self.text = undoOp.apply(self.text)
-        rollbackop = undoOp.rollbackOperation()
-
-        self.addRedo(rollbackop)
+        rollBack = self.doc.apply(undoOp)
+        self.addRedo(rollBack)
     
     def redo(self):
         """This pops from redo stack, adds to undo stack."""
         if not self.redo_stack: return
         redoOp = self.redo_stack.pop()
-        self.text = redoOp.apply(self.text)
-        undoOp = redoOp.rollbackOperation()
-        self.addUndo(undoOp)
+        rollback = self.doc.apply(redoOp)
+        self.addUndo(rollback)
     
 
 
+class Document:
+    def __init__(self):
+        self.text = ""
+
+    def apply(self, Op)->Operation:
+        oldText = self.text
+        self.text = Op.apply(self.text)
+        if oldText == self.text: return None
+        return Op.rollbackOperation()
+        
