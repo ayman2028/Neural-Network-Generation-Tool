@@ -1,16 +1,20 @@
 #!/bin/bash
 set -e
 
-# Wait for database to be ready
-echo "Waiting for PostgreSQL..."
-while ! nc -z db 5432; do
+# Wait for database to be ready (DB on EC2 host, RDS URL, or compose service "db")
+DB_HOST="${DB_HOST:-db}"
+DB_PORT="${DB_PORT:-5432}"
+echo "Waiting for PostgreSQL at ${DB_HOST}:${DB_PORT}..."
+while ! nc -z "$DB_HOST" "$DB_PORT"; do
   sleep 0.1
 done
 echo "PostgreSQL is ready"
 
-# Wait for Redis to be ready
-echo "Waiting for Redis..."
-while ! nc -z redis 6379; do
+# Wait for Redis to be ready (same hostnames as REDIS_URL / compose)
+REDIS_WAIT_HOST="${REDIS_HOST:-redis}"
+REDIS_WAIT_PORT="${REDIS_PORT:-6379}"
+echo "Waiting for Redis at ${REDIS_WAIT_HOST}:${REDIS_WAIT_PORT}..."
+while ! nc -z "$REDIS_WAIT_HOST" "$REDIS_WAIT_PORT"; do
   sleep 0.1
 done
 echo "Redis is ready"

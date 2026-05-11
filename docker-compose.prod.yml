@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: neural-network-app
     environment:
       DEBUG: ${DEBUG:-False}
@@ -16,7 +18,10 @@ services:
       DB_NAME: ${DB_NAME:-neural_network}
       DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       PYTHONUNBUFFERED: 1
@@ -37,7 +42,7 @@ services:
       gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120
       "
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -50,6 +55,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: neural-network-celery
     environment:
       DEBUG: ${DEBUG:-False}
@@ -60,7 +67,10 @@ services:
       DB_NAME: ${DB_NAME:-neural_network}
       DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       PYTHONUNBUFFERED: 1
@@ -78,6 +88,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: neural-network-beat
     environment:
       DEBUG: ${DEBUG:-False}
@@ -88,7 +100,10 @@ services:
       DB_NAME: ${DB_NAME:-neural_network}
       DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
       REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
       PYTHONUNBUFFERED: 1

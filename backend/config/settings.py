@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'django_celery_beat',
     'django_redis',
+    'rest_framework',
 
     # Local apps
     'accounts',
@@ -85,6 +86,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Use PostgreSQL if DB_HOST is set, otherwise use SQLite for development
 if os.getenv('DB_HOST'):
+    # libpq sslmode: use DB_SSLMODE=require for managed cloud DBs (e.g. RDS);
+    # prefer (default) negotiates SSL when offered; disable for local Postgres without TLS.
+    _db_sslmode = os.environ.get('DB_SSLMODE', 'prefer').strip() or 'prefer'
+    _db_options = {'sslmode': _db_sslmode}
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -94,7 +99,7 @@ if os.getenv('DB_HOST'):
             'USER': os.environ.get('DB_USER', 'postgres'),
             'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),
             'CONN_MAX_AGE': 600,
-            "OPTIONS": {"sslmode":"require"},
+            'OPTIONS': _db_options,
             'CONN_HEALTH_CHECKS': True,
         }
     }
@@ -143,11 +148,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
+# BASE_DIR is the backend package root (/app in Docker); volumes mount staticfiles/media here.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (User uploads)
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR.parent / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

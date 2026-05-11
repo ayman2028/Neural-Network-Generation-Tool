@@ -4,11 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+django = "==5.2.8"
+djangorestframework = "*"
 django-redis = "*"
 redis = "*"
 celery = "*"
 django-celery-beat = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+pillow = "*"
+requests = "*"
 
 [dev-packages]
 awsebcli = "*"

@@ -53,9 +53,9 @@ RUN mkdir -p /app/generator/outputs \
     /app/media \
     && chown -R djangouser:djangouser /app
 
-# Copy entrypoint script
+# Copy entrypoint script (strip CRLF so Linux exec/shebang works on Windows checkouts)
 COPY docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
+RUN sed -i 's/\r$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 # Set environment variables
 ENV DJANGO_SETTINGS_MODULE=config.settings
